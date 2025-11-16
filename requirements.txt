@@ -1,0 +1,27 @@
+
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+PyPDF2
+pypdfium2
+python-dotenv
+toml
+sentence-transformers
+# torch==2.1.2
+# transformers==4.37.0
+chromadb==0.4.15
+chromadb-client
+langchain
+langchain-community
+langchain-huggingface
+faiss-cpu
+numpy
+pandas
+tqdm
+httpx
+pytest
+pytest-asyncio
+loguru
+streamlit
+google-generativeai

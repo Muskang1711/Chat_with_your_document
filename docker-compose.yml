@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Main RAG API service
+  rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-api
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - ENVIRONMENT=production
+      - DEBUG=false
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    networks:
+      - rag-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+  # Streamlit UI service (optional)
+  rag-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: rag-ui
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://rag-api:8000
+    depends_on:
+      - rag-api
+    networks:
+      - rag-network
+    restart: unless-stopped
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  chromadb_data:
+    driver: local
+  logs:
+    driver: local
